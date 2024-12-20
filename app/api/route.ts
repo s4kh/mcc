@@ -32,12 +32,13 @@ export async function POST(req: NextRequest) {
       {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `secret=${process.env.CAPTCHA_SECRET}&response=${captchaToken}s`,
+        body: `secret=${process.env.CAPTCHA_SECRET}&response=${captchaToken}`,
       }
     );
     if (captchResp.ok) {
       const captchBody = await captchResp.json();
       if (!captchBody.success) {
+        console.log(captchBody);
         return NextResponse.json(
           {
             errors: {
@@ -164,7 +165,6 @@ export async function GET(req: NextRequest) {
         { status: err.statusCode }
       );
     }
-    console.log(err);
     return NextResponse.json(
       {
         message: "An unexpected error occurred",

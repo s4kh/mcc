@@ -4,6 +4,7 @@ import { useReCaptcha } from "next-recaptcha-v3";
 import MCCSelect, { MCCoption } from "@/app/components/MccSelect";
 import Link from "next/link";
 import { MoveLeft, ShieldX } from "lucide-react";
+import { SingleValue } from "react-select";
 
 export interface MCCForm  {
   merchantName: string;
@@ -24,8 +25,8 @@ export default function MCCCreatePage() {
   const [errors, setErrors] = useState<MCCForm |null>(null);
   const { executeRecaptcha } = useReCaptcha();
 
-  const handleMCCChange = (option: MCCoption) => {
-    setMcc(option.value);
+  const handleMCCChange = (option: SingleValue<MCCoption>) => {
+    setMcc(option?.value || "");
   };
 
   const handleSubmit = useCallback(
@@ -92,12 +93,12 @@ export default function MCCCreatePage() {
           </div>
         )}
         {/* Merchant Name Field */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
+        <div className="grid grid-cols-3 gap-4">
+          <div className="col-span-2">
             <label htmlFor="merchantName" className="block text-sm font-medium text-gray-700">
               Merchant Name
             </label>
-            <p className="text-gray-500 text-xs mt-1">Please enter the name of the merchant. Note that Walmart and Walmart Supercentres are considered different merchants.</p>
+            <p className="text-gray-500 text-xs mt-1">Note that Walmart and Walmart Supercentres are considered different merchants.</p>
             <input
               type="text"
               id="merchantName"
@@ -106,17 +107,17 @@ export default function MCCCreatePage() {
               onChange={(e) => setMerchantName(e.target.value)}
               placeholder="e.g., Walmart"
               required
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2 h-[41px]"
             />
             {errors?.merchantName && <p className="text-red-500 text-sm mt-1">{errors.merchantName}</p>}
           </div>
 
           {/* MCC Field */}
-          <div>
+          <div className="col-span-1">
             <label htmlFor="mcc" className="block text-sm font-medium text-gray-700">
-              Merchant Category Code
+              Category Code
             </label>
-            <p className="text-gray-500 text-xs mt-1">The MCC shows the merchants category. You can find this on your credit card statement.</p>
+            <p className="text-gray-500 text-xs mt-1">You can find this on your credit card statement.</p>
             <MCCSelect onChange={handleMCCChange}/>
             {errors?.mcc && <p className="text-red-500 text-sm mt-1">{errors.mcc}</p>}
             {/* <input
@@ -129,6 +130,50 @@ export default function MCCCreatePage() {
               required
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
             /> */}
+          </div>
+        </div>
+        {/* Card Type Field */}
+        <div className="grid grid-cols-3 gap-4">          
+
+          {/* Card Used for the Purchase Field */}
+          <div className="col-span-2">
+            <label htmlFor="cardUsed" className="block text-sm font-medium text-gray-700">
+              Card Product Name
+            </label>
+            <p className="text-gray-500 text-xs mt-1">Please enter the card product name as given by your bank (e.g., Amex Cobalt).</p>
+            <input
+              type="text"
+              id="cardUsed"
+              name="cardUsed"
+              value={cardUsed}
+              onChange={(e) => setCardUsed(e.target.value)}
+              placeholder="e.g., Scotiabank Momentum Infinite Visa"
+              required
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2 h-[41px]"
+            />
+            {errors?.cardUsed && <p className="text-red-500 text-sm mt-1">{errors.cardUsed}</p>}
+          </div> 
+          <div className="col-span-1">
+            <label htmlFor="cardType" className="block text-sm font-medium text-gray-700">
+              Card Type
+            </label>
+            <p className="text-gray-500 text-xs mt-1">Card network or issuer.</p>
+            <select
+              id="cardType"
+              name="cardType"
+              value={cardType}
+              onChange={(e) => setCardType(e.target.value)}
+              required
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2 h-[41px] bg-white"
+            >
+              <option value="" disabled>Select a card type</option>
+              <option value="visa">Visa</option>
+              <option value="mastercard">MasterCard</option>
+              <option value="amex">American Express</option>
+              <option value="discover">Discover</option>
+              <option value="other">Other</option>
+            </select>
+            {errors?.cardType && <p className="text-red-500 text-sm mt-1">{errors.cardType}</p>}
           </div>
         </div>
 
@@ -149,48 +194,7 @@ export default function MCCCreatePage() {
           />
         </div>
 
-        {/* Card Used for the Purchase Field */}
-        <div>
-          <label htmlFor="cardUsed" className="block text-sm font-medium text-gray-700">
-            Credit Card Name
-          </label>
-          <p className="text-gray-500 text-xs mt-1">Please enter the credit card name as given by your bank or the credit card product name (e.g., Scotiabank Momentum Infinite Visa).?</p>
-          <input
-            type="text"
-            id="cardUsed"
-            name="cardUsed"
-            value={cardUsed}
-            onChange={(e) => setCardUsed(e.target.value)}
-            placeholder="e.g., Scotiabank Momentum Infinite Visa"
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-          />
-          {errors?.cardUsed && <p className="text-red-500 text-sm mt-1">{errors.cardUsed}</p>}
-        </div>
-
-        {/* Card Type Field */}
-        <div>
-          <label htmlFor="cardType" className="block text-sm font-medium text-gray-700">
-            Card Type
-          </label>
-          <p className="text-gray-500 text-xs mt-1">Select the type of card you used (e.g., Visa, Mastercard, Amex).</p>
-          <select
-            id="cardType"
-            name="cardType"
-            value={cardType}
-            onChange={(e) => setCardType(e.target.value)}
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-          >
-            <option value="" disabled>Select a card type</option>
-            <option value="visa">Visa</option>
-            <option value="mastercard">MasterCard</option>
-            <option value="amex">American Express</option>
-            <option value="discover">Discover</option>
-            <option value="other">Other</option>
-          </select>
-          {errors?.cardType && <p className="text-red-500 text-sm mt-1">{errors.cardType}</p>}
-        </div>
+               
         <div className="flex justify-end items-center gap-4">         
           <button 
             type="submit" 

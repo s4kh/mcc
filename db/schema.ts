@@ -6,7 +6,10 @@ import {
   timestamp,
   unique,
   integer,
+  pgEnum,
 } from "drizzle-orm/pg-core";
+
+export const statusEnum = pgEnum("status", ["pending", "published"]);
 
 export const merchants = pgTable("merchants", {
   id: serial("id").primaryKey(),
@@ -14,6 +17,7 @@ export const merchants = pgTable("merchants", {
   location: varchar("location", { length: 255 }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+  status: statusEnum().default("pending"),
 });
 
 export const merchantCategories = pgTable(
@@ -24,6 +28,8 @@ export const merchantCategories = pgTable(
     mcc: varchar("mcc", { length: 4 }),
     cardType: varchar("card_type", { length: 10 }),
     cardName: varchar("card_name", { length: 80 }),
+    count: integer("count"),
+    status: statusEnum().default("pending"),
   },
   (table) => ({
     unqiueMerchantIssuer: unique().on(table.merchantId, table.cardType),
