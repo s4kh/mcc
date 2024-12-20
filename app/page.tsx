@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-6xl mx-auto p-6 bg-white shadow-md">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center space-x-4">
           <Search className="w-10 h-10 text-primary" strokeWidth={2.5} />

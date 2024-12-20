@@ -56,13 +56,12 @@ export default function MCCCreatePage() {
 
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md mt-8">
-      <div className="flex justify-between mb-4">
-        <Link href={"/"}>
-          <button 
-            className="text-primary hover:bg-gray-100 py-2 px-4 rounded border border-primary"
-          >
-            <MoveLeft />
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow-sm mt-8">
+       <div className="mb-4">
+        <Link href="/">
+          <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900 py-2 px-4 rounded transition-colors">
+            <MoveLeft className="w-5 h-5" />
+            <span>Back to Home</span>
           </button>
         </Link>
       </div>
@@ -195,14 +194,22 @@ export default function MCCCreatePage() {
         </div>
 
                
-        <div className="flex justify-end items-center gap-4">         
+        <div className="flex items-center justify-between border-t pt-6 mt-8">
+          <Link href="/">
+            <button 
+              type="button"
+              className="text-gray-600 hover:text-gray-900 px-6 py-2 rounded border border-gray-300 hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+          </Link>
           <button 
             type="submit" 
-            className="bg-primary hover:bg-primary-light text-white py-2 px-4 rounded"
+            className="bg-primary hover:bg-primary-light text-white px-8 py-2 rounded min-w-[120px] transition-colors"
           >
             Submit
-          </button>          
-        </div>       
+          </button>
+        </div>   
       </form>
     </div>
   );
